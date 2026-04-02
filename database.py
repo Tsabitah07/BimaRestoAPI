@@ -10,7 +10,6 @@ pymysql.install_as_MySQLdb()
 
 DATABASE_URL = os.getenv("DATABASE_URL") or "mysql+pymysql://root:@localhost:3306/bima_resto_api"
 
-# Ensure the database exists on the MySQL server before creating the SQLAlchemy engine.
 def ensure_database_exists(sqlalchemy_url: str) -> None:
     parsed = urlparse(sqlalchemy_url)
     db_name = parsed.path.lstrip('/') if parsed.path else None

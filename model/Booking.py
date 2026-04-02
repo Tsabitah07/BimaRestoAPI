@@ -6,10 +6,8 @@ class Booking(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    worker_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     booking_status_id = Column(Integer, nullable=False)
     booking_date = Column(DateTime, nullable=False)
     booking_session_id = Column(Integer, ForeignKey("booking_sessions.id"), nullable=False)
     number_of_people = Column(Integer, nullable=False)
-    extra_chair = Column(Integer, default=0)
     notes = Column(String(500), nullable=True)

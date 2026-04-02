@@ -22,11 +22,11 @@ data = [
 def seed_data(db: Session):
     if not db.query(booking_status_model).first():
         for item in data:
-            role = booking_status_model(
+            status = booking_status_model(
                 name=item["name"]
             )
-            db.add(role)
+            db.add(status)
         db.commit()
-        print("Database seeded with initial roles.")
+        print("Database seeded with initial booking statuses.")
     else:
-        print("Roles already exist, skipping seeding.")
+        print("Booking statuses already exist, skipping seeding.")

@@ -1,40 +1,39 @@
 from database import SessionLocal
 from seed.role import seed_data as seed_role_data
 from seed.user import seed_data as seed_user_data
-from seed.table import seed_data as seed_table_data
 from seed.menu import seed_data as seed_menu_data
 from seed.booking_status import seed_data as seed_booking_status_data
 from seed.booking_session import seed_data as seed_booking_session_data
 from seed.booking import seed_data as seed_booking_data
+from seed.food import seed_data as seed_food_data
 
-from model import BookedTable
 
 
 def run():
     db = SessionLocal()
     try:
-        print("Seeding role...")
+        print("Seeding roles...")
         seed_role_data(db)
 
-        print("Seeding user...")
+        print("Seeding users...")
         seed_user_data(db)
 
-        print("Seeding Table...")
-        seed_table_data(db)
-
-        print("Seeding Menu...")
+        print("Seeding menus and posters...")
         seed_menu_data(db)
 
-        print("Seeding Booking Status...")
+        print("Seeding booking statuses...")
         seed_booking_status_data(db)
 
-        print("Seeding Booking Session...")
+        print("Seeding booking sessions...")
         seed_booking_session_data(db)
 
-        print("Seeding Booking...")
+        print("Seeding food packages...")
+        seed_food_data(db)
+
+        print("Seeding bookings...")
         seed_booking_data(db)
 
-        print("Seeding selesai")
+        print("Seeding completed")
     except Exception as e:
         print("ERROR SEED:", e)
     finally:
