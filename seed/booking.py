@@ -7,7 +7,7 @@ from datetime import datetime
 data = [
     {
         "user_id": 5,
-        "booking_status_id": 4,
+        "booking_status": "completed",
         "booking_date": "2024-02-10",
         "booking_session_id": 1,
         "number_of_people": 4,
@@ -25,7 +25,7 @@ data = [
     },
     {
         "user_id": 6,
-        "booking_status_id": 4,
+        "booking_status": "pending",
         "booking_date": "2024-03-02",
         "booking_session_id": 1,
         "number_of_people": 2,
@@ -39,7 +39,7 @@ data = [
     },
     {
         "user_id": 6,
-        "booking_status_id": 1,
+        "booking_status": "confirmed",
         "booking_date": "2024-03-03",
         "booking_session_id": 2,
         "number_of_people": 11,
@@ -63,7 +63,7 @@ def seed_data(db: Session):
         for item in data:
             booking_entry = booking_model(
                 user_id=item["user_id"],
-                booking_status_id=item["booking_status_id"],
+                booking_status=item["booking_status"],
                 booking_date=datetime.fromisoformat(item["booking_date"]),
                 booking_session_id=item["booking_session_id"],
                 number_of_people=item["number_of_people"],
@@ -81,7 +81,7 @@ def seed_data(db: Session):
             # Try to find an existing booking that matches the seed item
             booking = db.query(booking_model).filter_by(
                 user_id=item["user_id"],
-                booking_status_id=item["booking_status_id"],
+                booking_status=item["booking_status"],
                 booking_date=datetime.fromisoformat(item["booking_date"]),
                 booking_session_id=item["booking_session_id"],
                 number_of_people=item["number_of_people"],
@@ -92,7 +92,7 @@ def seed_data(db: Session):
             if booking is None:
                 booking = booking_model(
                     user_id=item["user_id"],
-                    booking_status_id=item["booking_status_id"],
+                    booking_status=item["booking_status"],
                     booking_date=datetime.fromisoformat(item["booking_date"]),
                     booking_session_id=item["booking_session_id"],
                     number_of_people=item["number_of_people"],
@@ -130,3 +130,4 @@ def seed_data(db: Session):
         print("Database seeded with initial booked foods.")
     else:
         print("Booked foods already exist, skipping seeding.")
+

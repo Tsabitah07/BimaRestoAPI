@@ -6,9 +6,6 @@ data = [
         "name": "Admin"
     },
     {
-        "name": "Manager"
-    },
-    {
         "name": "Employee"
     },
     {

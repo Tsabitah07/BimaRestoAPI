@@ -16,7 +16,7 @@ data = [
         "username": "william",
         "email": "william.brown@gmail.com",
         "phone_number": "1234567891",
-        "password": "manager123",
+        "password": "employee123",
         "role_id": 2
     },
     {
@@ -24,7 +24,7 @@ data = [
         "username": "mary",
         "email": "mary.johnson@gmail.com",
         "phone_number": "1234567892",
-        "password": "employee123",
+        "password": "user123",
         "role_id": 3
     },
     {
@@ -33,7 +33,7 @@ data = [
         "email": "eric.smith@gmail.com",
         "phone_number": "1234567893",
         "password": "employee123",
-        "role_id": 3
+        "role_id": 2
     },
     {
         "name": "John Doe",
@@ -41,7 +41,7 @@ data = [
         "email": "john.doe@gmail.com",
         "phone_number": "1234567894",
         "password": "user123",
-        "role_id": 4
+        "role_id": 3
     },
     {
         "name": "Jane Anderson",
@@ -49,7 +49,7 @@ data = [
         "email": "jane.anderson@gmail.com",
         "phone_number": "1234567895",
         "password": "user123",
-        "role_id": 4
+        "role_id": 3
     }
 ]
 
