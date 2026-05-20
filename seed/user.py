@@ -1,3 +1,5 @@
+import hashlib
+
 from model.User import User as user_model
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
@@ -54,8 +56,8 @@ data = [
 ]
 
 def hash_password(password):
-    pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-    return pwd_context.hash(password)
+    # return hashlib.sha256(password.encode('utf-8')).hexdigest()
+    return CryptContext(schemes=["bcrypt"], deprecated="auto").hash(password)
 
 def seed_data(db: Session):
     if not db.query(user_model).first():

@@ -1,5 +1,6 @@
 from enum import Enum as PyEnum
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Enum as SQLEnum
+from sqlalchemy.orm import relationship
 from database import Base
 
 class BookingStatusEnum(str, PyEnum):
@@ -19,3 +20,6 @@ class Booking(Base):
     booking_session_id = Column(Integer, ForeignKey("booking_sessions.id"), nullable=False)
     number_of_people = Column(Integer, nullable=False)
     notes = Column(String(500), nullable=True)
+
+    # Relationships
+    booked_foods = relationship("BookedFood", back_populates="booking")

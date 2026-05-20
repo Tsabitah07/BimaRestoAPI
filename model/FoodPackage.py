@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
 from database import Base
 
 class FoodPackage(Base):
@@ -10,3 +11,7 @@ class FoodPackage(Base):
     menu_id = Column(Integer, ForeignKey('menu.id'), nullable=False)
     session_id = Column(Integer, ForeignKey('booking_sessions.id'), nullable=False)
     available_quantity = Column(Integer, nullable=False)
+
+    # Relationships
+    menu = relationship("Menu", back_populates="food_packages")
+    booked_foods = relationship("BookedFood", back_populates="food_package")
