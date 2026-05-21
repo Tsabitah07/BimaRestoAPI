@@ -46,7 +46,7 @@ def get_booking_by_id_with_details(db: Session, booking_id: int):
         joinedload(BookingModel.booked_foods).joinedload(BookedFoodModel.food_package).joinedload(FoodPackageModel.menu)
     ).filter(BookingModel.id == booking_id).first()
     if not booking:
-        raise HTTPException(status_code=404, detail="Booking not found")
+        raise HTTPException(status_code=404, detail="Booking tidak ditemukan")
     return transform_booking_to_detail(booking)
 
 def get_bookings_by_user_with_details(db: Session, user_id: int):
@@ -70,20 +70,23 @@ def get_all_bookings(db: Session):
 def get_booking_by_id(db: Session, booking_id: int):
     booking = db.query(BookingModel).filter(BookingModel.id == booking_id).first()
     if not booking:
-        raise HTTPException(status_code=404, detail="Booking not found")
+        raise HTTPException(status_code=404, detail="Booking tidak ditemukan")
     return booking
 
 def create_booking(db: Session, user_id: int, booking_status: str, booking_date: datetime,
                   booking_session_id: int, number_of_people: int, notes: str = None, booked_foods: list = None):
     # Verify user exists
+    print(f"DEBUG create_booking: user_id={user_id}, session_id={booking_session_id}, booked_foods={booked_foods}")
     user = db.query(UserModel).filter(UserModel.id == user_id).first()
     if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+        print("DEBUG create_booking: user not found")
+        raise HTTPException(status_code=404, detail="User tidak ditemukan")
 
     # Verify booking session exists
     session = db.query(BookingSessionModel).filter(BookingSessionModel.id == booking_session_id).first()
     if not session:
-        raise HTTPException(status_code=404, detail="Booking session not found")
+        print("DEBUG create_booking: session not found")
+        raise HTTPException(status_code=404, detail="Booking session tidak ditemukan")
 
     booking = BookingModel(
         user_id=user_id,
@@ -96,20 +99,39 @@ def create_booking(db: Session, user_id: int, booking_status: str, booking_date:
     db.add(booking)
     db.commit()
     db.refresh(booking)
+    print(f"DEBUG create_booking: booking created id={booking.id}")
 
     if booked_foods:
         for food_item in booked_foods:
-            # Verify food package exists
-            food = db.query(FoodPackageModel).filter(FoodPackageModel.id == food_item.get("food_id")).first()
-            if not food:
-                raise HTTPException(status_code=404, detail=f"Food package {food_item.get('food_id')} not found")
+            try:
+                # Support both dicts and Pydantic model instances
+                if isinstance(food_item, dict):
+                    food_id = food_item.get("food_id")
+                    quantity = food_item.get("quantity", 1)
+                else:
+                    # Pydantic models: access attributes
+                    food_id = getattr(food_item, "food_id", None)
+                    quantity = getattr(food_item, "quantity", 1)
 
-            booked_food = BookedFoodModel(
-                booking_id=booking.id,
-                food_id=food_item.get("food_id"),
-                quantity=food_item.get("quantity", 1)
-            )
-            db.add(booked_food)
+                # Verify food package exists
+                print(f"DEBUG create_booking: verifying food_id={food_id}")
+                food = db.query(FoodPackageModel).filter(FoodPackageModel.id == food_id).first()
+                if not food:
+                    print(f"DEBUG create_booking: food {food_id} not found")
+                    raise HTTPException(status_code=404, detail="Food package tidak ditemukan")
+
+                booked_food = BookedFoodModel(
+                    booking_id=booking.id,
+                    food_id=food_id,
+                    quantity=quantity
+                )
+                db.add(booked_food)
+            except HTTPException:
+                # Re-raise HTTP exceptions directly
+                raise
+            except Exception as exc:
+                print(f"DEBUG create_booking: unexpected error while creating booked_food: {exc}")
+                raise
         db.commit()
 
     return booking
@@ -118,7 +140,7 @@ def update_booking(db: Session, booking_id: int, booking_status: str = None,
                   number_of_people: int = None, notes: str = None):
     booking = db.query(BookingModel).filter(BookingModel.id == booking_id).first()
     if not booking:
-        raise HTTPException(status_code=404, detail="Booking not found")
+        raise HTTPException(status_code=404, detail="Booking tidak ditemukan")
 
     if booking_status:
         booking.booking_status = booking_status
@@ -134,7 +156,7 @@ def update_booking(db: Session, booking_id: int, booking_status: str = None,
 def delete_booking(db: Session, booking_id: int):
     booking = db.query(BookingModel).filter(BookingModel.id == booking_id).first()
     if not booking:
-        raise HTTPException(status_code=404, detail="Booking not found")
+        raise HTTPException(status_code=404, detail="Booking tidak ditemukan")
 
     # Delete associated booked foods
     db.query(BookedFoodModel).filter(BookedFoodModel.booking_id == booking_id).delete()
@@ -154,19 +176,19 @@ def get_all_booked_foods(db: Session):
 def get_booked_food_by_id(db: Session, booked_food_id: int):
     booked_food = db.query(BookedFoodModel).filter(BookedFoodModel.id == booked_food_id).first()
     if not booked_food:
-        raise HTTPException(status_code=404, detail="Booked food not found")
+        raise HTTPException(status_code=404, detail="Booked food tidak ditemukan")
     return booked_food
 
 def create_booked_food(db: Session, booking_id: int, food_id: int, quantity: int):
     # Verify booking exists
     booking = db.query(BookingModel).filter(BookingModel.id == booking_id).first()
     if not booking:
-        raise HTTPException(status_code=404, detail="Booking not found")
+        raise HTTPException(status_code=404, detail="Booking tidak ditemukan")
 
     # Verify food package exists
     food = db.query(FoodPackageModel).filter(FoodPackageModel.id == food_id).first()
     if not food:
-        raise HTTPException(status_code=404, detail="Food package not found")
+        raise HTTPException(status_code=404, detail="Food package tidak ditemukan")
 
     booked_food = BookedFoodModel(booking_id=booking_id, food_id=food_id, quantity=quantity)
     db.add(booked_food)
@@ -177,7 +199,7 @@ def create_booked_food(db: Session, booking_id: int, food_id: int, quantity: int
 def update_booked_food(db: Session, booked_food_id: int, quantity: int = None):
     booked_food = db.query(BookedFoodModel).filter(BookedFoodModel.id == booked_food_id).first()
     if not booked_food:
-        raise HTTPException(status_code=404, detail="Booked food not found")
+        raise HTTPException(status_code=404, detail="Booked food tidak ditemukan")
 
     if quantity is not None:
         booked_food.quantity = quantity
@@ -189,7 +211,7 @@ def update_booked_food(db: Session, booked_food_id: int, quantity: int = None):
 def delete_booked_food(db: Session, booked_food_id: int):
     booked_food = db.query(BookedFoodModel).filter(BookedFoodModel.id == booked_food_id).first()
     if not booked_food:
-        raise HTTPException(status_code=404, detail="Booked food not found")
+        raise HTTPException(status_code=404, detail="Booked food tidak ditemukan")
 
     db.delete(booked_food)
     db.commit()
@@ -207,7 +229,7 @@ def get_all_roles(db: Session):
 def get_role_by_id(db: Session, role_id: int):
     role = db.query(RoleModel).filter(RoleModel.id == role_id).first()
     if not role:
-        raise HTTPException(status_code=404, detail="Role not found")
+        raise HTTPException(status_code=404, detail="Role tidak ditemukan")
     return role
 
 def create_role(db: Session, name: str):
@@ -220,7 +242,7 @@ def create_role(db: Session, name: str):
 def update_role(db: Session, role_id: int, name: str = None):
     role = db.query(RoleModel).filter(RoleModel.id == role_id).first()
     if not role:
-        raise HTTPException(status_code=404, detail="Role not found")
+        raise HTTPException(status_code=404, detail="Role tidak ditemukan")
 
     if name:
         role.name = name
@@ -232,7 +254,7 @@ def update_role(db: Session, role_id: int, name: str = None):
 def delete_role(db: Session, role_id: int):
     role = db.query(RoleModel).filter(RoleModel.id == role_id).first()
     if not role:
-        raise HTTPException(status_code=404, detail="Role not found")
+        raise HTTPException(status_code=404, detail="Role tidak ditemukan")
 
     db.delete(role)
     db.commit()

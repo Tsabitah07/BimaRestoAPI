@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import List, Optional
 from datetime import datetime
+from schema.foodPackageResponse import FoodPackageSchema
 
 class MenuPosterSchema(BaseModel):
     id: Optional[int] = None
@@ -16,19 +17,38 @@ class MenuSchema(BaseModel):
     start_date: datetime
     end_date: datetime
     posters: List[str] = []
+    food_packages: List[FoodPackageSchema] = []
 
     class Config:
         from_attributes = True
 
     @staticmethod
     def from_orm_with_posters(menu):
-        """Convert Menu ORM object to schema with poster paths as strings"""
+        """Convert Menu ORM object to schema with poster paths and food packages"""
+        # Map posters to simple paths
+        posters = [poster.poster_path for poster in menu.posters] if getattr(menu, 'posters', None) else []
+
+        # Map food packages to FoodPackageSchema instances (or dicts)
+        food_packages = []
+        if getattr(menu, 'food_packages', None):
+            for fp in menu.food_packages:
+                # Create FoodPackageSchema from ORM attributes
+                food_packages.append(FoodPackageSchema(
+                    id=getattr(fp, 'id', None),
+                    name=getattr(fp, 'name', ''),
+                    description=getattr(fp, 'description', ''),
+                    menu_id=getattr(fp, 'menu_id', None),
+                    session_id=getattr(fp, 'session_id', None),
+                    available_quantity=getattr(fp, 'available_quantity', 0)
+                ))
+
         return MenuSchema(
             id=menu.id,
             name=menu.name,
             start_date=menu.start_date,
             end_date=menu.end_date,
-            posters=[poster.poster_path for poster in menu.posters] if menu.posters else []
+            posters=posters,
+            food_packages=food_packages
         )
 
 class MenuCreateSchema(BaseModel):

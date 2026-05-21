@@ -1,0 +1,15 @@
+fastapi>=0.95.0
+uvicorn[standard]>=0.21.1
+sqlalchemy>=1.4
+python-multipart>=0.0.6
+passlib[bcrypt]>=1.7.4
+python-jose>=3.3.0
+pydantic>=1.10.0
+
+# Unit Testing Requirements for BimaRestoAPI
+
+pytest==7.4.3
+pytest-asyncio==0.21.1
+httpx==0.24.1
+# Tests module
+

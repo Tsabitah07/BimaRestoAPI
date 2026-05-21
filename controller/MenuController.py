@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from model.Menu import Menu as MenuModel
 from model.MenuPoster import MenuPoster as MenuPosterModel
 from fastapi import HTTPException
@@ -12,12 +12,13 @@ UPLOADS_FOLDER = "uploads/menu_posters"
 Path(UPLOADS_FOLDER).mkdir(parents=True, exist_ok=True)
 
 def get_all_menus(db: Session):
-    return db.query(MenuModel).all()
+    # Eagerly load posters and food_packages to include them in the response without extra queries
+    return db.query(MenuModel).options(joinedload(MenuModel.posters), joinedload(MenuModel.food_packages)).all()
 
 def get_menu_by_id(db: Session, menu_id: int):
-    menu = db.query(MenuModel).filter(MenuModel.id == menu_id).first()
+    menu = db.query(MenuModel).options(joinedload(MenuModel.posters), joinedload(MenuModel.food_packages)).filter(MenuModel.id == menu_id).first()
     if not menu:
-        raise HTTPException(status_code=404, detail="Menu not found")
+        raise HTTPException(status_code=404, detail="Menu tidak ditemukan")
     return menu
 
 def create_menu(db: Session, name: str, start_date: datetime, end_date: datetime, poster_paths: list = None):
@@ -37,7 +38,7 @@ def create_menu(db: Session, name: str, start_date: datetime, end_date: datetime
 def update_menu(db: Session, menu_id: int, name: str = None, start_date: datetime = None, end_date: datetime = None):
     menu = db.query(MenuModel).filter(MenuModel.id == menu_id).first()
     if not menu:
-        raise HTTPException(status_code=404, detail="Menu not found")
+        raise HTTPException(status_code=404, detail="Menu tidak ditemukan")
 
     if name:
         menu.name = name
@@ -53,7 +54,7 @@ def update_menu(db: Session, menu_id: int, name: str = None, start_date: datetim
 def delete_menu(db: Session, menu_id: int):
     menu = db.query(MenuModel).filter(MenuModel.id == menu_id).first()
     if not menu:
-        raise HTTPException(status_code=404, detail="Menu not found")
+        raise HTTPException(status_code=404, detail="Menu tidak ditemukan")
 
     # Delete associated poster files from disk
     posters = db.query(MenuPosterModel).filter(MenuPosterModel.menu_id == menu_id).all()
@@ -72,21 +73,21 @@ def get_all_menu_posters(db: Session):
 def get_menu_poster_by_id(db: Session, poster_id: int):
     poster = db.query(MenuPosterModel).filter(MenuPosterModel.id == poster_id).first()
     if not poster:
-        raise HTTPException(status_code=404, detail="Menu poster not found")
+        raise HTTPException(status_code=404, detail="Menu poster tidak ditemukan")
     return poster
 
 def get_menu_posters_by_menu(db: Session, menu_id: int):
     # Verify menu exists
     menu = db.query(MenuModel).filter(MenuModel.id == menu_id).first()
     if not menu:
-        raise HTTPException(status_code=404, detail="Menu not found")
+        raise HTTPException(status_code=404, detail="Menu tidak ditemukan")
     return db.query(MenuPosterModel).filter(MenuPosterModel.menu_id == menu_id).all()
 
 def create_menu_poster(db: Session, menu_id: int, poster_path: str):
     # Verify menu exists
     menu = db.query(MenuModel).filter(MenuModel.id == menu_id).first()
     if not menu:
-        raise HTTPException(status_code=404, detail="Menu not found")
+        raise HTTPException(status_code=404, detail="Menu tidak ditemukan")
 
     poster = MenuPosterModel(menu_id=menu_id, poster_path=poster_path)
     db.add(poster)
@@ -97,7 +98,7 @@ def create_menu_poster(db: Session, menu_id: int, poster_path: str):
 def delete_menu_poster(db: Session, poster_id: int):
     poster = db.query(MenuPosterModel).filter(MenuPosterModel.id == poster_id).first()
     if not poster:
-        raise HTTPException(status_code=404, detail="Menu poster not found")
+        raise HTTPException(status_code=404, detail="Menu poster tidak ditemukan")
 
     # Delete poster file from disk
     delete_poster_file(poster.poster_path)

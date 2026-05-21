@@ -10,19 +10,19 @@ def get_all_food_packages(db: Session):
 def get_food_package_by_id(db: Session, food_id: int):
     food = db.query(FoodPackageModel).filter(FoodPackageModel.id == food_id).first()
     if not food:
-        raise HTTPException(status_code=404, detail="Food package not found")
+        raise HTTPException(status_code=404, detail="Food package tidak ditemukan")
     return food
 
 def create_food_package(db: Session, name: str, description: str, menu_id: int, session_id: int, available_quantity: int):
     # Verify menu exists
     menu = db.query(MenuModel).filter(MenuModel.id == menu_id).first()
     if not menu:
-        raise HTTPException(status_code=404, detail="Menu not found")
+        raise HTTPException(status_code=404, detail="Menu tidak ditemukan")
 
     # Verify booking session exists
     session = db.query(BookingSessionModel).filter(BookingSessionModel.id == session_id).first()
     if not session:
-        raise HTTPException(status_code=404, detail="Booking session not found")
+        raise HTTPException(status_code=404, detail="Booking session tidak ditemukan")
 
     food = FoodPackageModel(
         name=name,
@@ -40,18 +40,18 @@ def update_food_package(db: Session, food_id: int, name: str = None, description
                        menu_id: int = None, session_id: int = None, available_quantity: int = None):
     food = db.query(FoodPackageModel).filter(FoodPackageModel.id == food_id).first()
     if not food:
-        raise HTTPException(status_code=404, detail="Food package not found")
+        raise HTTPException(status_code=404, detail="Food package tidak ditemukan")
 
     if menu_id:
         menu = db.query(MenuModel).filter(MenuModel.id == menu_id).first()
         if not menu:
-            raise HTTPException(status_code=404, detail="Menu not found")
+            raise HTTPException(status_code=404, detail="Menu tidak ditemukan")
         food.menu_id = menu_id
 
     if session_id:
         session = db.query(BookingSessionModel).filter(BookingSessionModel.id == session_id).first()
         if not session:
-            raise HTTPException(status_code=404, detail="Booking session not found")
+            raise HTTPException(status_code=404, detail="Booking session tidak ditemukan")
         food.session_id = session_id
 
     if name:
@@ -68,7 +68,7 @@ def update_food_package(db: Session, food_id: int, name: str = None, description
 def delete_food_package(db: Session, food_id: int):
     food = db.query(FoodPackageModel).filter(FoodPackageModel.id == food_id).first()
     if not food:
-        raise HTTPException(status_code=404, detail="Food package not found")
+        raise HTTPException(status_code=404, detail="Food package tidak ditemukan")
 
     db.delete(food)
     db.commit()
@@ -79,4 +79,3 @@ def get_food_packages_by_menu(db: Session, menu_id: int):
 
 def get_food_packages_by_session(db: Session, session_id: int):
     return db.query(FoodPackageModel).filter(FoodPackageModel.session_id == session_id).all()
-

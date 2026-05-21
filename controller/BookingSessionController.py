@@ -8,7 +8,7 @@ def get_all_booking_sessions(db: Session):
 def get_booking_session_by_id(db: Session, session_id: int):
     session = db.query(BookingSessionModel).filter(BookingSessionModel.id == session_id).first()
     if not session:
-        raise HTTPException(status_code=404, detail="Booking session not found")
+        raise HTTPException(status_code=404, detail="Booking session tidak ditemukan")
     return session
 
 def create_booking_session(db: Session, name: str, time: str):
@@ -21,7 +21,7 @@ def create_booking_session(db: Session, name: str, time: str):
 def update_booking_session(db: Session, session_id: int, name: str = None, time: str = None):
     session = db.query(BookingSessionModel).filter(BookingSessionModel.id == session_id).first()
     if not session:
-        raise HTTPException(status_code=404, detail="Booking session not found")
+        raise HTTPException(status_code=404, detail="Booking session tidak ditemukan")
 
     if name:
         session.name = name
@@ -35,9 +35,8 @@ def update_booking_session(db: Session, session_id: int, name: str = None, time:
 def delete_booking_session(db: Session, session_id: int):
     session = db.query(BookingSessionModel).filter(BookingSessionModel.id == session_id).first()
     if not session:
-        raise HTTPException(status_code=404, detail="Booking session not found")
+        raise HTTPException(status_code=404, detail="Booking session tidak ditemukan")
 
     db.delete(session)
     db.commit()
     return session
-

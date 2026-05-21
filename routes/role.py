@@ -9,6 +9,22 @@ from schema.roleResponse import (
 
 router = APIRouter()
 
+# Serializer helper for SQLAlchemy models
+def serialize_model(obj):
+    if obj is None:
+        return None
+    if isinstance(obj, list):
+        result = []
+        for item in obj:
+            if hasattr(item, "__table__"):
+                result.append({c.name: getattr(item, c.name) for c in item.__table__.columns})
+            else:
+                result.append(item)
+        return result
+    if hasattr(obj, "__table__"):
+        return {c.name: getattr(obj, c.name) for c in obj.__table__.columns}
+    return obj
+
 @router.get("/", tags=["Role"], response_model=RoleListResponseSchema)
 def get_all_roles(db: Session = Depends(get_db)):
     """Get all roles"""
@@ -17,7 +33,7 @@ def get_all_roles(db: Session = Depends(get_db)):
         return {
             "message": "Roles retrieved successfully",
             "status": 200,
-            "data": roles
+            "data": serialize_model(roles)
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -30,14 +46,14 @@ def get_role(role_id: int, db: Session = Depends(get_db)):
         return {
             "message": "Role retrieved successfully",
             "status": 200,
-            "data": role
+            "data": serialize_model(role)
         }
     except HTTPException as e:
         raise e
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.post("/", tags=["Role"], response_model=RoleResponseSchema)
+@router.post("/", tags=["Role"], response_model=RoleResponseSchema, status_code=201)
 def create_role(payload: RoleCreateSchema, db: Session = Depends(get_db)):
     """Create a new role"""
     try:
@@ -45,7 +61,7 @@ def create_role(payload: RoleCreateSchema, db: Session = Depends(get_db)):
         return {
             "message": "Role created successfully",
             "status": 201,
-            "data": role
+            "data": serialize_model(role)
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -58,7 +74,7 @@ def update_role(role_id: int, payload: RoleUpdateSchema, db: Session = Depends(g
         return {
             "message": "Role updated successfully",
             "status": 200,
-            "data": role
+            "data": serialize_model(role)
         }
     except HTTPException as e:
         raise e
@@ -73,10 +89,9 @@ def delete_role(role_id: int, db: Session = Depends(get_db)):
         return {
             "message": "Role deleted successfully",
             "status": 200,
-            "data": role
+            "data": serialize_model(role)
         }
     except HTTPException as e:
         raise e
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-

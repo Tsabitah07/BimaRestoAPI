@@ -37,7 +37,7 @@ def get_booking_session(session_id: int, db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.post("/", tags=["Booking Session"], response_model=BookingSessionResponseSchema)
+@router.post("/", tags=["Booking Session"], response_model=BookingSessionResponseSchema, status_code=201)
 def create_booking_session(payload: BookingSessionCreateSchema, db: Session = Depends(get_db)):
     """Create a new booking session"""
     try:
@@ -79,4 +79,3 @@ def delete_booking_session(session_id: int, db: Session = Depends(get_db)):
         raise e
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-

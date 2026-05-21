@@ -37,7 +37,7 @@ def get_food_package(food_id: int, db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.post("/", tags=["Food Package"], response_model=FoodPackageResponseSchema)
+@router.post("/", tags=["Food Package"], response_model=FoodPackageResponseSchema, status_code=201)
 def create_food_package(payload: FoodPackageCreateSchema, db: Session = Depends(get_db)):
     """Create a new food package"""
     try:
@@ -122,4 +122,3 @@ def get_food_packages_by_session(session_id: int, db: Session = Depends(get_db))
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-

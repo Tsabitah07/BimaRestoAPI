@@ -40,15 +40,35 @@ def get_current_user(authorization: str = Header(None), db: Session = Depends(ge
         raise HTTPException(status_code=401, detail=f"Invalid token: {str(e)}")
 
 
+# Serializer helper for SQLAlchemy models
+def serialize_model(obj):
+    if obj is None:
+        return None
+    # If it's a list of models
+    if isinstance(obj, list):
+        result = []
+        for item in obj:
+            if hasattr(item, "__table__"):
+                result.append({c.name: getattr(item, c.name) for c in item.__table__.columns})
+            else:
+                result.append(item)
+        return result
+    # Single model
+    if hasattr(obj, "__table__"):
+        return {c.name: getattr(obj, c.name) for c in obj.__table__.columns}
+    return obj
+
+
 @router.get("/", tags=["User"], response_model=UserListResponseSchema)
 def get_all_users(db: Session = Depends(get_db)):
     """Get all users"""
     try:
         users = UserController.get_all_users(db)
+        users_serialized = serialize_model(users)
         return {
             "message": "Users retrieved successfully",
             "status": 200,
-            "data": users
+            "data": users_serialized
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -91,7 +111,7 @@ def get_current_user_profile(authorization: str = Header(None), db: Session = De
         return {
             "message": "Current user profile retrieved successfully",
             "status": 200,
-            "data": user
+            "data": serialize_model(user)
         }
     except HTTPException as e:
         print(f"DEBUG: /profile/me - HTTPException: {e.detail}")
@@ -109,7 +129,7 @@ def get_user(user_id: int, db: Session = Depends(get_db)):
         return {
             "message": "User retrieved successfully",
             "status": 200,
-            "data": user
+            "data": serialize_model(user)
         }
     except HTTPException as e:
         raise e
@@ -117,7 +137,7 @@ def get_user(user_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.post("/", tags=["User"], response_model=UserResponseSchema)
+@router.post("/", tags=["User"], response_model=UserResponseSchema, status_code=201)
 def create_user(payload: UserCreateSchema, db: Session = Depends(get_db)):
     """Create new user"""
     try:
@@ -133,7 +153,7 @@ def create_user(payload: UserCreateSchema, db: Session = Depends(get_db)):
         return {
             "message": "User created successfully",
             "status": 201,
-            "data": user
+            "data": serialize_model(user)
         }
     except HTTPException as e:
         raise e
@@ -157,7 +177,7 @@ def update_user(user_id: int, payload: UserUpdateSchema, db: Session = Depends(g
         return {
             "message": "User updated successfully",
             "status": 200,
-            "data": user
+            "data": serialize_model(user)
         }
     except HTTPException as e:
         raise e
@@ -173,7 +193,7 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
         return {
             "message": "User deleted successfully",
             "status": 200,
-            "data": user
+            "data": serialize_model(user)
         }
     except HTTPException as e:
         raise e
@@ -189,7 +209,7 @@ def get_user_by_username(username: str, db: Session = Depends(get_db)):
         return {
             "message": "User retrieved successfully",
             "status": 200,
-            "data": user
+            "data": serialize_model(user)
         }
     except HTTPException as e:
         raise e
@@ -205,7 +225,7 @@ def get_user_by_email(email: str, db: Session = Depends(get_db)):
         return {
             "message": "User retrieved successfully",
             "status": 200,
-            "data": user
+            "data": serialize_model(user)
         }
     except HTTPException as e:
         raise e
@@ -221,7 +241,7 @@ def get_users_by_role(role_id: int, db: Session = Depends(get_db)):
         return {
             "message": "Users retrieved successfully",
             "status": 200,
-            "data": users
+            "data": serialize_model(users)
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -241,7 +261,7 @@ def change_password(user_id: int, payload: UserChangePasswordSchema, db: Session
         return {
             "message": "Password changed successfully",
             "status": 200,
-            "data": user
+            "data": serialize_model(user)
         }
     except HTTPException as e:
         raise e

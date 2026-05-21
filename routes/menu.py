@@ -42,7 +42,7 @@ def get_menu(menu_id: int, db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.post("/", tags=["Menu"], response_model=MenuResponseSchema)
+@router.post("/", tags=["Menu"], response_model=MenuResponseSchema, status_code=201)
 def create_menu(payload: MenuCreateSchema, db: Session = Depends(get_db)):
     """Create a new menu"""
     try:
@@ -166,7 +166,7 @@ def upload_menu_poster(menu_id: int, file: UploadFile = File(...), db: Session =
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.post("/posters", tags=["Menu"], response_model=MenuPosterResponseSchema)
+@router.post("/posters", tags=["Menu"], response_model=MenuPosterResponseSchema, status_code=201)
 def create_menu_poster(payload: MenuPosterCreateSchema, db: Session = Depends(get_db)):
     """Create a new menu poster with file path (legacy endpoint)"""
     try:

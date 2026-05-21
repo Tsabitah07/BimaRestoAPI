@@ -40,7 +40,7 @@ def get_booking(booking_id: int, db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.post("/", tags=["Booking"], response_model=BookingDetailResponseSchema)
+@router.post("/", tags=["Booking"], response_model=BookingDetailResponseSchema, status_code=201)
 def create_booking(payload: BookingCreateSchema, db: Session = Depends(get_db)):
     """Create a new booking"""
     try:
@@ -159,7 +159,7 @@ def get_booked_food(booked_food_id: int, db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.post("/foods", tags=["Booking"], response_model=BookedFoodResponseSchema)
+@router.post("/foods", tags=["Booking"], response_model=BookedFoodResponseSchema, status_code=201)
 def create_booked_food(payload: BookedFoodSchema, db: Session = Depends(get_db)):
     """Create a new booked food entry"""
     try:
