@@ -5,56 +5,179 @@ from sqlalchemy.orm import Session
 from datetime import datetime
 
 data = [
-    {
-        "user_id": 5,
-        "booking_status": "completed",
-        "booking_date": "2024-02-10",
-        "booking_session_id": 1,
-        "number_of_people": 4,
-        "notes": "Birthday celebration",
-        "booked_foods": [
-            {
-                "food_id": 1,
-                "quantity": 3
-            },
-            {
-                "food_id": 2,
-                "quantity": 1
-            }
-        ]
-    },
-    {
-        "user_id": 6,
-        "booking_status": "pending",
-        "booking_date": "2024-03-02",
-        "booking_session_id": 1,
-        "number_of_people": 2,
-        "notes": "Anniversary dinner",
-        "booked_foods": [
-            {
-                "food_id": 3,
-                "quantity": 2
-            }
-        ]
-    },
-    {
-        "user_id": 6,
-        "booking_status": "confirmed",
-        "booking_date": "2024-03-03",
-        "booking_session_id": 2,
-        "number_of_people": 11,
-        "notes": "Family gathering",
-        "booked_foods": [
-            {
-                "food_id": 9,
-                "quantity": 4
-            },
-            {
-                "food_id": 10,
-                "quantity": 7
-            }
-        ]
-    }
+  {
+    "user_id": 5,
+    "booking_status": "completed",
+    "booking_date": "2026-03-05",
+    "booking_session_id": 1,
+    "number_of_people": 4,
+    "notes": "Family Dinner",
+    "booked_foods": [
+      { "food_id": 1, "quantity": 2 },
+      { "food_id": 2, "quantity": 2 }
+    ]
+  },
+  {
+    "user_id": 6,
+    "booking_status": "completed",
+    "booking_date": "2026-03-12",
+    "booking_session_id": 2,
+    "number_of_people": 2,
+    "notes": "No spicy for one",
+    "booked_foods": [
+      { "food_id": 3, "quantity": 1 },
+      { "food_id": 4, "quantity": 1 }
+    ]
+  },
+  {
+    "user_id": 6,
+    "booking_status": "completed",
+    "booking_date": "2026-03-25",
+    "booking_session_id": 1,
+    "number_of_people": 3,
+    "notes": "Window seat please",
+    "booked_foods": [
+      { "food_id": 1, "quantity": 3 }
+    ]
+  },
+  {
+    "user_id": 5,
+    "booking_status": "completed",
+    "booking_date": "2026-04-05",
+    "booking_session_id": 1,
+    "number_of_people": 5,
+    "notes": "Anniversary",
+    "booked_foods": [
+      { "food_id": 5, "quantity": 3 },
+      { "food_id": 6, "quantity": 2 }
+    ]
+  },
+  {
+    "user_id": 5,
+    "booking_status": "completed",
+    "booking_date": "2026-04-18",
+    "booking_session_id": 2,
+    "number_of_people": 2,
+    "notes": "",
+    "booked_foods": [
+      { "food_id": 7, "quantity": 1 },
+      { "food_id": 8, "quantity": 1 }
+    ]
+  },
+  {
+    "user_id": 6,
+    "booking_status": "completed",
+    "booking_date": "2026-04-28",
+    "booking_session_id": 1,
+    "number_of_people": 4,
+    "notes": "Company lunch",
+    "booked_foods": [
+      { "food_id": 5, "quantity": 4 }
+    ]
+  },
+  {
+    "user_id": 7,
+    "booking_status": "completed",
+    "booking_date": "2026-05-02",
+    "booking_session_id": 1,
+    "number_of_people": 6,
+    "notes": "Large table",
+    "booked_foods": [
+      { "food_id": 9, "quantity": 3 },
+      { "food_id": 10, "quantity": 3 }
+    ]
+  },
+  {
+    "user_id": 7,
+    "booking_status": "completed",
+    "booking_date": "2026-05-15",
+    "booking_session_id": 2,
+    "number_of_people": 2,
+    "notes": "Birthday surprise",
+    "booked_foods": [
+      { "food_id": 11, "quantity": 2 }
+    ]
+  },
+  {
+    "user_id": 7,
+    "booking_status": "completed",
+    "booking_date": "2026-05-22",
+    "booking_session_id": 2,
+    "number_of_people": 3,
+    "notes": "",
+    "booked_foods": [
+      { "food_id": 12, "quantity": 3 }
+    ]
+  },
+  {
+    "user_id": 7,
+    "booking_status": "completed",
+    "booking_date": "2026-05-29",
+    "booking_session_id": 1,
+    "number_of_people": 4,
+    "notes": "Reunion",
+    "booked_foods": [
+      { "food_id": 9, "quantity": 2 },
+      { "food_id": 10, "quantity": 2 }
+    ]
+  },
+  {
+    "user_id": 6,
+    "booking_status": "completed",
+    "booking_date": "2026-06-05",
+    "booking_session_id": 1,
+    "number_of_people": 2,
+    "notes": "Date night",
+    "booked_foods": [
+      { "food_id": 13, "quantity": 1 },
+      { "food_id": 14, "quantity": 1 }
+    ]
+  },
+  {
+    "user_id": 5,
+    "booking_status": "completed",
+    "booking_date": "2026-06-12",
+    "booking_session_id": 2,
+    "number_of_people": 5,
+    "notes": "Extra crackers please",
+    "booked_foods": [
+      { "food_id": 15, "quantity": 3 },
+      { "food_id": 16, "quantity": 2 }
+    ]
+  },
+  {
+    "user_id": 6,
+    "booking_status": "completed",
+    "booking_date": "2026-06-18",
+    "booking_session_id": 1,
+    "number_of_people": 4,
+    "notes": "",
+    "booked_foods": [
+      { "food_id": 13, "quantity": 4 }
+    ]
+  },
+  {
+    "user_id": 7,
+    "booking_status": "completed",
+    "booking_date": "2026-06-25",
+    "booking_session_id": 2,
+    "number_of_people": 3,
+    "notes": "Farewell dinner",
+    "booked_foods": [
+      { "food_id": 16, "quantity": 3 }
+    ]
+  },
+  {
+    "user_id": 6,
+    "booking_status": "completed",
+    "booking_date": "2026-06-29",
+    "booking_session_id": 1,
+    "number_of_people": 2,
+    "notes": "Last minute booking",
+    "booked_foods": [
+      { "food_id": 14, "quantity": 2 }
+    ]
+  }
 ]
 
 def seed_data(db: Session):

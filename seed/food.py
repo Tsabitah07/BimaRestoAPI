@@ -3,166 +3,145 @@ from sqlalchemy.orm import Session
 
 data = [
     {
-        'name': 'Paket Lunch A',
-        'description': 'Nasi, Ikan Goreng, Sayur, dan Teh Manis',
-        'menu_id': 1,
-        'session_id': 1,
-        'available_quantity': 20
+        "name": "Soto Banjar Mantap",
+        "description": "Nasi, soto banjar ayam kampung, perkedel, dan sate ayam",
+        "menu_id": 1,
+        "session_id": 1,
+        "available_quantity": 20
     },
     {
-        'name': 'Paket Lunch B',
-        'description': 'Nasi, Ikan Bakar, Sayur, dan Es Teh',
-        'menu_id': 1,
-        'session_id': 1,
-        'available_quantity': 15
+        "name": "Ikan Patin Bakar",
+        "description": "Nasi, patin bakar bambu, sayur asam kutai, dan sambal raja",
+        "menu_id": 1,
+        "session_id": 1,
+        "available_quantity": 20
     },
     {
-        'name': 'Paket Lunch A',
-        'description': 'Nasi, Ayam Goreng, Sayur, dan Teh Manis',
-        'menu_id': 2,
-        'session_id': 1,
-        'available_quantity': 20
+        "name": "Nasi Kuning Banjar",
+        "description": "Nasi kuning, haruan (ikan gabus) masak habang, dan telur",
+        "menu_id": 1,
+        "session_id": 2,
+        "available_quantity": 20
     },
     {
-        'name': 'Paket Lunch B',
-        'description': 'Nasi, Ayam Bakar, Sayur, dan Es Teh',
-        'menu_id': 2,
-        'session_id': 1,
-        'available_quantity': 15
+        "name": "Mie Sagu Pontianak",
+        "description": "Mie sagu goreng, bakwan udang, dan kerupuk ikan",
+        "menu_id": 1,
+        "session_id": 2,
+        "available_quantity": 20
     },
+{
+        "name": "Rendang Padang Set",
+        "description": "Nasi, rendang daging, gulai nangka, dan sambal ijo",
+        "menu_id": 2,
+        "session_id": 1,
+        "available_quantity": 20
+      },
+      {
+        "name": "Sate Padang Pariaman",
+        "description": "Sate lidah sapi, ketupat, dan keripik singkong pedas",
+        "menu_id": 2,
+        "session_id": 1,
+        "available_quantity": 20
+      },
+      {
+        "name": "Pempek Komplit",
+        "description": "Kapal selam, lenjer, adaan, dan mie kuning",
+        "menu_id": 2,
+        "session_id": 2,
+        "available_quantity": 20
+      },
+      {
+        "name": "Mie Aceh Spesial",
+        "description": "Mie aceh tumis daging, emping, dan acar bawang",
+        "menu_id": 2,
+        "session_id": 2,
+        "available_quantity": 20
+      },
+{
+        "name": "Gudeg Jogja",
+        "description": "Nasi, gudeg, krecek pedas, dan opor ayam",
+        "menu_id": 3,
+        "session_id": 1,
+        "available_quantity": 20
+      },
+      {
+        "name": "Rawon Surabaya",
+        "description": "Nasi, rawon daging sapi, telur asin, dan tauge pendek",
+        "menu_id": 3,
+        "session_id": 1,
+        "available_quantity": 20
+      },
+      {
+        "name": "Nasi Liwet Solo",
+        "description": "Nasi gurih, ayam suwir, sayur labu siam, dan areh",
+        "menu_id": 3,
+        "session_id": 2,
+        "available_quantity": 20
+      },
+      {
+        "name": "Pecel Madiun",
+        "description": "Nasi, sayuran rebus, bumbu kacang, rempeyek, dan tahu tempe",
+        "menu_id": 3,
+        "session_id": 2,
+        "available_quantity": 20
+      },
     {
-        'name': 'Paket Dinner A',
-        'description': 'Nasi, Daging Sapi, Sayur, dan Air Mineral',
-        'menu_id': 1,
-        'session_id': 2,
-        'available_quantity': 20
-    },
-    {
-        'name': 'Paket Dinner B',
-        'description': 'Nasi, Ayam Bakar, Sayur, dan Es Teh',
-        'menu_id': 1,
-        'session_id': 2,
-        'available_quantity': 15
-    },
-    {
-        'name': 'Paket Dinner A',
-        'description': 'Nasi, Daging Sapi, Sayur, dan Air Mineral',
-        'menu_id': 2,
-        'session_id': 2,
-        'available_quantity': 20
-    },
-    {
-        'name': 'Paket Dinner B',
-        'description': 'Nasi, Ayam Bakar, Sayur, dan Es Teh',
-        'menu_id': 2,
-        'session_id': 2,
-        'available_quantity': 15
-    }
-]
-
-from model.FoodPackage import FoodPackage as food_package_model
-from sqlalchemy.orm import Session
-
-data = [
-    # ==================== LUNCH SESSION ====================
-
-    # MENU 1 - Kalimantan
-    {
-        'name': 'Paket Lunch A - Kalimantan',
-        'description': 'Nasi, Ikan Goreng, Sayur, Teh Manis',
-        'menu_id': 1,
-        'session_id': 1,
-        'available_quantity': 20
-    },
-    {
-        'name': 'Paket Lunch B - Kalimantan',
-        'description': 'Nasi, Ikan Bakar, Sayur, Es Teh',
-        'menu_id': 1,
-        'session_id': 1,
-        'available_quantity': 20
-    },
-
-    # MENU 2 - Sumatra
-    {
-        'name': 'Paket Lunch A - Sumatra',
-        'description': 'Nasi, Ayam Goreng, Sayur, Teh Manis',
-        'menu_id': 2,
-        'session_id': 1,
-        'available_quantity': 20
-    },
-    {
-        'name': 'Paket Lunch B - Sumatra',
-        'description': 'Nasi, Ayam Bakar, Sayur, Es Teh',
-        'menu_id': 2,
-        'session_id': 1,
-        'available_quantity': 20
-    },
-
-    # MENU 3 - Javanese
-    {
-        'name': 'Paket Lunch A - Javanese',
-        'description': 'Nasi, Ayam Penyet, Sayur, Teh Manis',
-        'menu_id': 3,
-        'session_id': 1,
-        'available_quantity': 20
-    },
-    {
-        'name': 'Paket Lunch B - Javanese',
-        'description': 'Nasi, Ayam Bakar, Sayur, Es Teh',
-        'menu_id': 3,
-        'session_id': 1,
-        'available_quantity': 20
-    },
-
-    # ==================== DINNER SESSION ====================
-
-    # MENU 1 - Kalimantan
-    {
-        'name': 'Paket Dinner A - Kalimantan',
-        'description': 'Nasi, Daging Sapi, Sayur, Air Mineral',
-        'menu_id': 1,
-        'session_id': 2,
-        'available_quantity': 20
-    },
-    {
-        'name': 'Paket Dinner B - Kalimantan',
-        'description': 'Nasi, Ayam Bakar, Sayur, Es Teh',
-        'menu_id': 1,
-        'session_id': 2,
-        'available_quantity': 20
-    },
-
-    # MENU 2 - Sumatra
-    {
-        'name': 'Paket Dinner A - Sumatra',
-        'description': 'Nasi, Rendang, Sayur, Air Mineral',
-        'menu_id': 2,
-        'session_id': 2,
-        'available_quantity': 20
-    },
-    {
-        'name': 'Paket Dinner B - Sumatra',
-        'description': 'Nasi, Ayam Pop, Sayur, Es Teh',
-        'menu_id': 2,
-        'session_id': 2,
-        'available_quantity': 20
-    },
-
-    # MENU 3 - Javanese
-    {
-        'name': 'Paket Dinner A - Javanese',
-        'description': 'Nasi, Gudeg, Sayur, Air Mineral',
-        'menu_id': 3,
-        'session_id': 2,
-        'available_quantity': 20
-    },
-    {
-        'name': 'Paket Dinner B - Javanese',
-        'description': 'Nasi, Ayam Goreng, Sayur, Es Teh',
-        'menu_id': 3,
-        'session_id': 2,
-        'available_quantity': 20
-    },
+        "name": "Nasi Campur Bali",
+        "description": "Nasi, sate lilit, ayam betutu suwir, dan lawar",
+        "menu_id": 4,
+        "session_id": 1,
+        "available_quantity": 20
+      },
+      {
+        "name": "Bebek Bengil Set",
+        "description": "Nasi, bebek goreng krispi, sambal matah, dan sayur urap",
+        "menu_id": 4,
+        "session_id": 1,
+        "available_quantity": 20
+      },
+      {
+        "name": "Ayam Betutu Utuh",
+        "description": "Nasi, ayam betutu bumbu genep, kacang goreng, dan sambal embe",
+        "menu_id": 4,
+        "session_id": 2,
+        "available_quantity": 20
+      },
+      {
+        "name": "Tipat Cantok",
+        "description": "Ketupat, sayuran, bumbu kacang bali, dan kerupuk",
+        "menu_id": 4,
+        "session_id": 2,
+        "available_quantity": 20
+      },
+  {
+    "name": "Paket Papeda Kuah Kuning",
+    "description": "Papeda, Ikan Mubara kuah kuning, dan sayur tumis kangkung bunga pepaya",
+    "menu_id": 5,
+    "session_id": 1,
+    "available_quantity": 20
+  },
+  {
+    "name": "Ikan Bakar Manokwari",
+    "description": "Ikan tongkol bakar bumbu rempah khas Manokwari, nasi putih, dan sambal mentah",
+    "menu_id": 5,
+    "session_id": 1,
+    "available_quantity": 20
+  },
+  {
+    "name": "Nasi Sagu Komplit",
+    "description": "Nasi sagu, sate ulat sagu (opsional/ayam), dan tumis daun pakis",
+    "menu_id": 5,
+    "session_id": 2,
+    "available_quantity": 20
+  },
+  {
+    "name": "Udang Selingkuh Wamena",
+    "description": "Udang air tawar saus tiram pedas, nasi putih, dan keladi rebus",
+    "menu_id": 5,
+    "session_id": 2,
+    "available_quantity": 20
+  }
 ]
 
 
